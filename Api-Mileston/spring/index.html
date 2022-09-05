@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Json BD</title>
+  </head>
+  <body>
+    <header class="border mt-2 border-info">
+        <h1 class="text-center text-info">The Best Images</h1>
+
+    </header>
+    <main>
+        <div class="d-flex justify-content-center  h-100">
+            <div id="spring"  class="p-5 text-info spinner-grow" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+        </div>
+
+
+        <section class="">
+            <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal  fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <h5 class="modal-title" id="exampleModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div id="modal" class="modal-body">
+
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        </section>
+     <section class="container"> 
+
+
+        
+
+        <div id="images-container"  class="row pt-3 row-cols-1 row-cols-md-3 g-4">
+           
+            <!-- <div class="col">
+              <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+              </div>
+            </div> -->
+          </div>
+     </section>
+
+
+    </main>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+    <script src="Json.js"></script>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
+
+
+
+const displayAllCategory = (categories) => {
+    
+  console.log(categories)
+  
+  const categoryList = document.getElementById('category');
+
+  categories.forEach(category => {
+      
+      const ul = document.createElement('ul');
+      ul.classList.add('list-unstyled')
+      ul.innerHTML = `
+        <li onclick="loadAllnews('${category.category_id}')" class="li">${category.category_name}</li>
+      `
+      categoryList.appendChild(ul)
+
+
+  })
+
+}
+
+const loadAllnews = (category_id) => {
+
+  Url = (`https://openapi.programming-hero.com/api/news/category/${category_id}`)
+  fetch(Url)
+  .then(res=>res.json())
+  .then(data =>  displayAllnews(data.data))
+
+}
+const displayAllnews = (newses) => {
+  console.log(newses);
+
+  const allItem     = document.getElementById('number');
+  const allItemText = allItem.innerText;
+   allItem.innerText = newses.length
+   
+  const cardContainer = document.getElementById('card-container');
+  cardContainer.innerHTML = ' ';
+
+  newses.forEach(news => {
+      
+      const div = document.createElement('div');
+      div.classList.add('row')
+      div.innerHTML = `
+      <div class="mb-4 row shadow-lg p-3 g-0">
+      <div class="col-md-4  ">
+        <img src="${news.thumbnail_url}" class="img-fluid w-100 rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h3 class="card-title">${news.title}</h3>
+          <p class="card-text text-secondary">${news.details.length > 300 ? news.details.slice(0, 300) + '...' : news.details}</p>
+          <p class="card-text text-secondary">${news.details.length > 300 ? news.details.slice(300,600) +'...': news.details}</p>
+
+          <div class="d-flex justify-content-between align-items-center">
+            
+          <div class="mt-4 d-flex justify-content-between align-items-center">
+          <img src="${news.author.img}" class="img-fluid img  mx-3 rounded-circle 25" alt="...">
+          <div>
+          <span>${news.author.name ? news.author.name : "No name available"}   </span>
+          <br>
+          <span>${news.author.published_date ? news.author.published_date : "publish no available"}</span>
+
+          </div>
+          </div>
+          <div>
+          <p class="mt-3"><i class="fa-regular fa-eye"></i> ${news.total_view?news.total_view : "No views" }</p>
+          </div>
+
+          <div>
+          <span><i class="fa-regular fa-star"></i></span>
+          <span><i class="fa-regular fa-star"></i></span>
+          <span><i class="fa-regular fa-star"></i></span>
+          <span><i class="fa-regular fa-star"></i></span>
+          <span><i class="fa-regular fa-star"></i></span>
+
+
+
+
+          </div>
+
+          <div>
+          <span class="p-3"  data-bs-toggle="modal" data-bs-target="#exampleModal"
+           onclick="loadDetails('${news._id}')"><i class="p-3 fa-solid fa-arrow-right"></i></span>
+
+          
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+      `
+      cardContainer.appendChild(div);
+
+  })
+  
+
+}
+
+
+const loadDetails = (_id) => {
+
+  
+  Url = (`https://openapi.programming-hero.com/api/news/${_id}`);
+  fetch(Url)
+  .then(res=>res.json())
+      .then(data => displayDetails(data.data[0]))
+
+
+ 
+
+}
+
+const displayDetails = (news) => {
+  
+  console.log(news)
+
+  
+  const modal = document.getElementById('exampleModalLabel');
+  modal.innerText = `Id : ${news.category_id}  `;
+  const ModalBody = document.getElementById('modal');
+ModalBody.innerHTML = `
+<h4 class="fw-bold font">${news.title}</h4>
+  <img src="${news.image_url}" class="img-fluid w-100 h-100 rounded-start" alt="...">
+  <p class="font">${news.details.length > 400 ? news.details.slice(0, 400 )+ '...': news.details}</p>
+
+  <div class="p-4 pr-0 pt-0 pb-0 mt-4 d-flex font  align-items-center">
+          <img src="${news.author.img}" class="img-fluid img  mx-3 rounded-circle 25" alt="...">
+          <div>
+          <span>${news.author.name ? news.author.name : "No name available"}</span>
+          <br>
+          <span>${news.author.published_date ? news.author.published_date : "publish no available"}</span>
+          
+
+          </div>
+          <p class="ms-auto mt-3"><i class="fa-regular fa-eye"></i> ${news.total_view?news.total_view : "No views"}</p>
+
+          </div>
+
+  `
+
+
+
+}
+loadCategory()
+loadAllnews()

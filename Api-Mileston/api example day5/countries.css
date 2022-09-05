@@ -1,0 +1,12 @@
+#countries-container{
+
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:15px;
+}
+.list{
+    border: 2px solid salmon;
+    padding: 5px;
+    background-color: rgb(205, 209, 209) ;
+    color: rgb(7, 46, 81);
+}
